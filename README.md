@@ -1,8 +1,8 @@
 # fleet-health-ingest
 
-Small observability ingest lab. HTTP POST of generic host health, MariaDB store, Grafana read.
+Observability ingest lab: HTTP POST of generic host health, MariaDB store, Grafana read.
 
-This is personal skill-up for the US keyword screen: **Docker, GitHub Actions, then AWS**. It is not a work platform and it does not speak any vendor monitoring protocol.
+Docker Compose locally. GitHub Actions builds the image. AWS deploy comes next.
 
 ![ci](https://github.com/mciciriello/fleet-health-ingest/actions/workflows/ci.yml/badge.svg)
 
@@ -20,19 +20,17 @@ Payload shape:
 {"host":"lab-01","cpu_pct":12.4,"mem_pct":41.0,"ok":true}
 ```
 
-Local compose passwords (`ingest` / `grafana` / `admin`) are lab defaults. Do not reuse them on AWS.
+Compose passwords (`ingest` / `grafana` / `admin`) are lab defaults. Do not reuse them on AWS.
 
-## Week 1: run it on this machine
+## Run locally
 
-You need Docker Compose **or** Podman with the compose plugin. This repo's author machine had Podman 4.9 and no Docker yet. Either is fine. The file is still `docker-compose.yml` because that is the name recruiters look for.
+Docker Compose or Podman with the compose plugin.
 
 ```bash
-cd ~/CODE/fleet-health-ingest
 docker compose up --build
-# or: podman-compose up --build
 ```
 
-Wait until ingest is listening. Then in another terminal:
+In another terminal:
 
 ```bash
 curl -sS http://127.0.0.1:8080/health
@@ -40,8 +38,6 @@ curl -sS http://127.0.0.1:8080/health
 ```
 
 Open [http://127.0.0.1:3000/d/fleet-health/fleet-health](http://127.0.0.1:3000/d/fleet-health/fleet-health). You should see `lab-01`. Grafana login is `admin` / `admin` if anonymous view is not enough.
-
-**Done when:** a row you posted shows in Grafana.
 
 ## Tests without Compose
 
@@ -52,13 +48,13 @@ pip install -r ingest/requirements.txt -r ingest/requirements-dev.txt
 cd ingest && pytest
 ```
 
-## Week 2: CI
+## CI
 
 Every push to `main` runs pytest and builds the ingest image. On `main` it also pushes `ghcr.io/mciciriello/fleet-health-ingest`.
 
-## Later (not this commit)
+## Next
 
-Terraform, AWS VPC/IAM/S3/ECS, Actions deploy via OIDC. See the desk page `roles/it-tools-and-automation/cloud-spec.md` in `it-tanda-consultant`.
+Terraform on AWS: VPC, IAM, S3, ECS (or EC2), Actions deploy via OIDC.
 
 ## API
 
