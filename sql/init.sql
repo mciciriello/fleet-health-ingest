@@ -1,0 +1,16 @@
+CREATE TABLE IF NOT EXISTS health_events (
+  id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  host VARCHAR(128) NOT NULL,
+  cpu_pct DECIMAL(5,2) NOT NULL,
+  mem_pct DECIMAL(5,2) NOT NULL,
+  ok BOOLEAN NOT NULL,
+  received_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE USER IF NOT EXISTS 'ingest'@'%' IDENTIFIED BY 'ingest';
+GRANT INSERT, SELECT ON fleet.health_events TO 'ingest'@'%';
+
+CREATE USER IF NOT EXISTS 'grafana'@'%' IDENTIFIED BY 'grafana';
+GRANT SELECT ON fleet.health_events TO 'grafana'@'%';
+
+FLUSH PRIVILEGES;

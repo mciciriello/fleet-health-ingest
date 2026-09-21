@@ -1,0 +1,36 @@
+{
+  "annotations": { "list": [] },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "id": null,
+  "links": [],
+  "panels": [
+    {
+      "datasource": { "type": "mysql", "uid": "fleet-mariadb" },
+      "fieldConfig": { "defaults": {}, "overrides": [] },
+      "gridPos": { "h": 8, "w": 24, "x": 0, "y": 0 },
+      "id": 1,
+      "options": { "showHeader": true },
+      "targets": [
+        {
+          "datasource": { "type": "mysql", "uid": "fleet-mariadb" },
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT received_at, host, cpu_pct, mem_pct, ok FROM health_events ORDER BY id DESC LIMIT 50",
+          "refId": "A"
+        }
+      ],
+      "title": "Latest fleet health",
+      "type": "table"
+    }
+  ],
+  "schemaVersion": 39,
+  "tags": ["fleet-health"],
+  "templating": { "list": [] },
+  "time": { "from": "now-6h", "to": "now" },
+  "timezone": "browser",
+  "title": "Fleet health",
+  "uid": "fleet-health",
+  "version": 1
+}
