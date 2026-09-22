@@ -7,30 +7,30 @@
   "links": [],
   "panels": [
     {
-      "datasource": { "type": "mysql", "uid": "fleet-mariadb" },
+      "datasource": { "type": "mysql", "uid": "wired-mariadb" },
       "fieldConfig": { "defaults": {}, "overrides": [] },
       "gridPos": { "h": 8, "w": 24, "x": 0, "y": 0 },
       "id": 1,
       "options": { "showHeader": true },
       "targets": [
         {
-          "datasource": { "type": "mysql", "uid": "fleet-mariadb" },
+          "datasource": { "type": "mysql", "uid": "wired-mariadb" },
           "format": "table",
           "rawQuery": true,
           "rawSql": "SELECT received_at, host, cpu_pct, mem_pct, ok FROM health_events ORDER BY id DESC LIMIT 50",
           "refId": "A"
         }
       ],
-      "title": "Latest fleet health",
+      "title": "Latest",
       "type": "table"
     }
   ],
   "schemaVersion": 39,
-  "tags": ["fleet-health"],
+  "tags": ["layer"],
   "templating": { "list": [] },
   "time": { "from": "now-6h", "to": "now" },
   "timezone": "browser",
-  "title": "Fleet health",
-  "uid": "fleet-health",
+  "title": "Layer",
+  "uid": "layer",
   "version": 1
 }

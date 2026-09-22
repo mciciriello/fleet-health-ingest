@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Layer - operator tour (wireframe)</title>
+  <style>
+    :root {
+      --ink: #1c1917;
+      --muted: #57534e;
+      --line: #a8a29e;
+      --paper: #f5f0e8;
+      --card: #fffcf7;
+      --ok: #3f6212;
+      --ok-bg: #ecfccb;
+      --bad: #9f1239;
+      --bad-bg: #ffe4e6;
+      --note: #9a3412;
+      --note-bg: #ffedd5;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font: 16px/1.5 "IBM Plex Sans", "Segoe UI", sans-serif;
+      color: var(--ink);
+      background: var(--paper);
+    }
+    .wrap { max-width: 1120px; margin: 0 auto; padding: 2rem 1.25rem 4rem; }
+    header.hero { margin-bottom: 2.5rem; }
+    header.hero p.kicker {
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      font-size: 0.75rem;
+      color: var(--muted);
+      margin: 0 0 0.5rem;
+    }
+    h1 { font-size: 2rem; line-height: 1.2; margin: 0 0 0.75rem; }
+    .lede { font-size: 1.15rem; max-width: 40rem; }
+    nav.toc {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin: 1.5rem 0 0;
+    }
+    nav.toc a {
+      color: var(--ink);
+      text-decoration: none;
+      border: 1px dashed var(--line);
+      padding: 0.35rem 0.7rem;
+      font-size: 0.85rem;
+      background: var(--card);
+    }
+    nav.toc a:hover { border-style: solid; }
+    section.screen { margin: 2.75rem 0; }
+    section.screen h2 {
+      font-size: 1.25rem;
+      margin: 0 0 0.35rem;
+    }
+    .why {
+      color: var(--muted);
+      max-width: 40rem;
+      margin: 0 0 1rem;
+    }
+    .layout {
+      display: grid;
+      grid-template-columns: 1fr 280px;
+      gap: 1rem;
+      align-items: start;
+    }
+    @media (max-width: 860px) {
+      .layout { grid-template-columns: 1fr; }
+    }
+    .frame {
+      background: var(--card);
+      border: 2px solid var(--ink);
+      min-height: 280px;
+    }
+    .chrome {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      border-bottom: 1px solid var(--ink);
+      padding: 0.45rem 0.75rem;
+      font-size: 0.8rem;
+    }
+    .dots span {
+      display: inline-block;
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      border: 1px solid var(--ink);
+    }
+    .url {
+      flex: 1;
+      border: 1px dashed var(--line);
+      padding: 0.15rem 0.5rem;
+      color: var(--muted);
+    }
+    .panel { padding: 0.9rem 1rem 1.1rem; }
+    .row { display: flex; gap: 0.75rem; flex-wrap: wrap; }
+    .kpi, .box, .host, .bar-wrap {
+      border: 1px dashed var(--line);
+      padding: 0.75rem;
+      flex: 1;
+      min-width: 140px;
+    }
+    .kpi strong, .host strong { display: block; font-size: 1.4rem; }
+    .kpi.ok, .host.ok { background: var(--ok-bg); border-color: var(--ok); }
+    .kpi.bad, .host.bad { background: var(--bad-bg); border-color: var(--bad); }
+    table.wf {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.9rem;
+    }
+    table.wf th, table.wf td {
+      border-bottom: 1px dashed var(--line);
+      text-align: left;
+      padding: 0.4rem 0.35rem;
+    }
+    .pill {
+      display: inline-block;
+      padding: 0.05rem 0.45rem;
+      font-size: 0.75rem;
+      border: 1px solid currentColor;
+    }
+    .pill.ok { color: var(--ok); background: var(--ok-bg); }
+    .pill.bad { color: var(--bad); background: var(--bad-bg); }
+    .bars { display: grid; gap: 0.45rem; margin-top: 0.5rem; }
+    .bar {
+      height: 10px;
+      background: repeating-linear-gradient(-45deg, #e7e5e4, #e7e5e4 4px, #d6d3d1 4px, #d6d3d1 8px);
+      border: 1px solid var(--ink);
+      position: relative;
+    }
+    .bar > i {
+      display: block;
+      height: 100%;
+      background: var(--ink);
+      opacity: 0.35;
+    }
+    .bar.hot > i { background: var(--bad); opacity: 0.7; }
+    aside.note {
+      background: var(--note-bg);
+      border: 1px solid var(--note);
+      color: var(--ink);
+      padding: 0.85rem 0.95rem;
+      font-size: 0.9rem;
+    }
+    aside.note strong { color: var(--note); display: block; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.35rem; }
+    pre {
+      background: #1c1917;
+      color: #f5f0e8;
+      padding: 0.9rem 1rem;
+      overflow: auto;
+      font-size: 0.85rem;
+      margin: 0;
+    }
+    .callout {
+      border-left: 4px solid var(--ink);
+      padding: 0.2rem 0 0.2rem 0.85rem;
+      margin: 0.75rem 0 0;
+    }
+    footer.fine {
+      margin-top: 3rem;
+      color: var(--muted);
+      font-size: 0.85rem;
+      max-width: 40rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header class="hero">
+      <p class="kicker">Wireframe · operator tour · not a running app</p>
+      <h1>You open Layer when you do not want to SSH.</h1>
+      <p class="lede">
+        This is not a custom website we will paint from scratch.
+        The thing you look at is <strong>Grafana</strong>, dashboard <strong>Layer</strong>.
+        Hosts (navis) POST a tiny health sample. You glance. Green, leave it. Red, go look.
+        Same instinct as a Proxmox panel: one place, fleet first, then the sick box.
+      </p>
+      <nav class="toc" aria-label="Tour screens">
+        <a href="#why">1. Why you would want this</a>
+        <a href="#glance">2. At a glance</a>
+        <a href="#hosts">3. Who reported</a>
+        <a href="#one">4. One sick navi</a>
+        <a href="#feed">5. The raw feed</a>
+        <a href="#report">6. How a host talks in</a>
+        <a href="#today">7. Lab today vs this picture</a>
+      </nav>
+    </header>
+
+    <section class="screen" id="why">
+      <h2>1. Why you would want this</h2>
+      <p class="why">You already know the feeling: a handful of Linux boxes, and the only way to know they are unhappy is to log in. That does not scale past “I remember to check.” Layer is the check, done for you.</p>
+      <div class="layout">
+        <div class="frame">
+          <div class="chrome"><div class="dots"><span></span> <span></span> <span></span></div><div class="url">the job in one sentence</div></div>
+          <div class="panel">
+            <p style="margin-top:0"><strong>Before:</strong> SSH to navi-01, <code>top</code>, SSH to navi-02, repeat. Hope you noticed the one that is swapping.</p>
+            <p><strong>After:</strong> Open Layer. Three navis reported in the last few minutes. Two are fine. One is not. You go to that one.</p>
+            <div class="callout">If a client asked for “a monitoring panel for Proxmox,” you would sketch nodes, red/green, then a drill-down. This is that sketch, for generic host health, not a hypervisor.</div>
+          </div>
+        </div>
+        <aside class="note">
+          <strong>End user</strong>
+          You. The person who owns the boxes. Not a customer portal. Not a vendor console. A lab panel you would actually leave open on a spare screen.
+        </aside>
+      </div>
+    </section>
+
+    <section class="screen" id="glance">
+      <h2>2. At a glance (Layer home)</h2>
+      <p class="why">First paint must answer: is the estate boring, or is something on fire? Counts first. Names second. Graphs third.</p>
+      <div class="layout">
+        <div class="frame">
+          <div class="chrome"><div class="dots"><span></span> <span></span> <span></span></div><div class="url">http://127.0.0.1:3000/d/layer/layer · Grafana · Layer</div></div>
+          <div class="panel">
+            <div class="row">
+              <div class="kpi">Reporting<br><strong>3</strong> navis in window</div>
+              <div class="kpi ok">OK<br><strong>2</strong></div>
+              <div class="kpi bad">Not OK<br><strong>1</strong> navi-02</div>
+            </div>
+            <p style="font-size:0.85rem;color:var(--muted);margin:0.85rem 0 0.4rem">CPU / memory, last sample per host (wireframe)</p>
+            <div class="bars">
+              <div>navi-01 cpu 12% <div class="bar"><i style="width:12%"></i></div></div>
+              <div>navi-02 cpu 91% <div class="bar hot"><i style="width:91%"></i></div></div>
+              <div>navi-03 cpu 28% <div class="bar"><i style="width:28%"></i></div></div>
+            </div>
+          </div>
+        </div>
+        <aside class="note">
+          <strong>What you hope to feel</strong>
+          Under five seconds: “one of them is sick, it is navi-02.” You do not read a log. You do not wonder if Grafana is empty. Silence of data is also a smell: a navi that stopped posting is missing, not healthy.
+        </aside>
+      </div>
+    </section>
+
+    <section class="screen" id="hosts">
+      <h2>3. Who reported</h2>
+      <p class="why">The host list is the CI list in your head: name, last seen, last CPU, last memory, last ok. Sort by not-ok, then by how stale.</p>
+      <div class="layout">
+        <div class="frame">
+          <div class="chrome"><div class="dots"><span></span> <span></span> <span></span></div><div class="url">Layer · panel: hosts</div></div>
+          <div class="panel">
+            <table class="wf">
+              <thead>
+                <tr><th>Host</th><th>Last seen</th><th>CPU</th><th>Mem</th><th>OK</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>navi-02</td><td>12s ago</td><td>91.0</td><td>87.4</td>
+                  <td><span class="pill bad">false</span></td>
+                </tr>
+                <tr>
+                  <td>navi-01</td><td>19s ago</td><td>12.4</td><td>41.0</td>
+                  <td><span class="pill ok">true</span></td>
+                </tr>
+                <tr>
+                  <td>navi-03</td><td>41s ago</td><td>28.1</td><td>55.2</td>
+                  <td><span class="pill ok">true</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <aside class="note">
+          <strong>Pleasant</strong>
+          Sick row first. You should not hunt. Clicking a name (Grafana variable, later) opens screen 4. Today the lab only has a latest-rows table; this list is the finished intent.
+        </aside>
+      </div>
+    </section>
+
+    <section class="screen" id="one">
+      <h2>4. One sick navi</h2>
+      <p class="why">Once you know who, you want time: was this a spike or a slide? Same as opening <code>sar</code> after <code>top</code>, without the login.</p>
+      <div class="layout">
+        <div class="frame">
+          <div class="chrome"><div class="dots"><span></span> <span></span> <span></span></div><div class="url">Layer · host = navi-02</div></div>
+          <div class="panel">
+            <div class="host bad"><strong>navi-02</strong> last ok: false · mem 87% · cpu 91%</div>
+            <p style="font-size:0.85rem;color:var(--muted);margin:0.85rem 0 0.35rem">CPU % over the dashboard window (sketch)</p>
+            <div class="bar hot" style="height:72px"><i style="width:100%;clip-path:polygon(0 80%, 20% 70%, 40% 65%, 55% 20%, 70% 15%, 100% 10%, 100% 100%, 0 100%)"></i></div>
+            <p style="font-size:0.85rem;color:var(--muted);margin:0.85rem 0 0.35rem">Memory % (sketch)</p>
+            <div class="bar hot" style="height:56px"><i style="width:100%;clip-path:polygon(0 50%, 40% 45%, 70% 25%, 100% 18%, 100% 100%, 0 100%)"></i></div>
+          </div>
+        </div>
+        <aside class="note">
+          <strong>Decision</strong>
+          Spike that already fell: watch. Slide that is still up: go to the box. Layer does not ticket, patch, or SSH for you. It tells you which door to open.
+        </aside>
+      </div>
+    </section>
+
+    <section class="screen" id="feed">
+      <h2>5. The raw feed</h2>
+      <p class="why">Trust, then detail. A table of the last samples is how you prove ingest is alive. This panel already exists in the lab.</p>
+      <div class="layout">
+        <div class="frame">
+          <div class="chrome"><div class="dots"><span></span> <span></span> <span></span></div><div class="url">Layer · panel: Latest</div></div>
+          <div class="panel">
+            <table class="wf">
+              <thead>
+                <tr><th>received_at</th><th>host</th><th>cpu</th><th>mem</th><th>ok</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>16:14:02</td><td>navi-02</td><td>91.0</td><td>87.4</td><td><span class="pill bad">false</span></td></tr>
+                <tr><td>16:14:01</td><td>navi-01</td><td>12.4</td><td>41.0</td><td><span class="pill ok">true</span></td></tr>
+                <tr><td>16:13:48</td><td>navi-03</td><td>28.1</td><td>55.2</td><td><span class="pill ok">true</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <aside class="note">
+          <strong>Lab today</strong>
+          This is the whole Grafana dashboard right now: one Latest table. The screens above are what we are aiming the finished Layer at, still in Grafana, still the same four payload fields.
+        </aside>
+      </div>
+    </section>
+
+    <section class="screen" id="report">
+      <h2>6. How a host talks in (not a GUI)</h2>
+      <p class="why">There is no pretty “agent settings” page in this lab. A navi (or you, with curl) POSTs JSON. If that stops, Layer goes quiet for that name. Quiet is the bug.</p>
+      <div class="layout">
+        <div class="frame">
+          <div class="chrome"><div class="dots"><span></span> <span></span> <span></span></div><div class="url">POST /ingest · the only write path</div></div>
+          <pre>{
+  "host": "navi-01",
+  "cpu_pct": 12.4,
+  "mem_pct": 41.0,
+  "ok": true
+}</pre>
+        </div>
+        <aside class="note">
+          <strong>Why this is enough</strong>
+          Four fields. You can cron it, you can fake it with <code>./scripts/post-sample.sh</code>. The UX promise is on the read side (Layer), not a second app to configure hosts.
+        </aside>
+      </div>
+    </section>
+
+    <section class="screen" id="today">
+      <h2>7. Lab today vs this picture</h2>
+      <p class="why">Believe the destination. Do not pretend Grafana already looks like screen 2. Cloud later does not change the UX. It changes where Layer is reachable from.</p>
+      <div class="layout">
+        <div class="frame">
+          <div class="chrome"><div class="dots"><span></span> <span></span> <span></span></div><div class="url">same product, two places</div></div>
+          <div class="panel">
+            <table class="wf">
+              <thead>
+                <tr><th></th><th>Now (Compose in LXC)</th><th>Finished (same Layer)</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Open</td>
+                  <td>localhost:3000 /d/layer/layer</td>
+                  <td>A URL on AWS, same dashboard</td>
+                </tr>
+                <tr>
+                  <td>You see</td>
+                  <td>Latest table, sample host navi-01</td>
+                  <td>Glance counts, host list, one-navi time, feed</td>
+                </tr>
+                <tr>
+                  <td>You do</td>
+                  <td>curl / post-sample.sh</td>
+                  <td>Still POST. Maybe a tiny cron on each navi.</td>
+                </tr>
+                <tr>
+                  <td>You do not get</td>
+                  <td colspan="2">Tickets, SSH, patching, Kubernetes, a custom React SPA</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <aside class="note">
+          <strong>Build order, UX first</strong>
+          Keep ingest as it is. Grow Layer in Grafana until screen 2 and 3 are true. Then put the same panel behind the cloud delivery layer. If Layer is not a panel you would leave open, the AWS work is decorating an empty room.
+        </aside>
+      </div>
+    </section>
+
+    <footer class="fine">
+      Static wireframe for fleet-health-ingest. Names from NAMING.md (wired, navi, Layer).
+      Not screenshots of Grafana. Open this file in a browser; nothing here talks to the API.
+    </footer>
+  </div>
+</body>
+</html>

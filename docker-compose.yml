@@ -1,9 +1,10 @@
 # Local lab only. These passwords are not secrets. Do not reuse them on AWS.
+name: wired
 services:
   mariadb:
     image: mariadb:11.4
     environment:
-      MARIADB_DATABASE: fleet
+      MARIADB_DATABASE: wired
       MARIADB_ROOT_PASSWORD: localroot
     volumes:
       - ./sql/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
@@ -23,7 +24,7 @@ services:
       DATABASE_PORT: "3306"
       DATABASE_USER: ingest
       DATABASE_PASSWORD: ingest
-      DATABASE_NAME: fleet
+      DATABASE_NAME: wired
     ports:
       - "8080:8080"
     depends_on:

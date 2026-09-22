@@ -1,3 +1,5 @@
+USE wired;
+
 CREATE TABLE IF NOT EXISTS health_events (
   id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
   host VARCHAR(128) NOT NULL,
@@ -8,9 +10,9 @@ CREATE TABLE IF NOT EXISTS health_events (
 );
 
 CREATE USER IF NOT EXISTS 'ingest'@'%' IDENTIFIED BY 'ingest';
-GRANT INSERT, SELECT ON fleet.health_events TO 'ingest'@'%';
+GRANT INSERT, SELECT ON wired.health_events TO 'ingest'@'%';
 
 CREATE USER IF NOT EXISTS 'grafana'@'%' IDENTIFIED BY 'grafana';
-GRANT SELECT ON fleet.health_events TO 'grafana'@'%';
+GRANT SELECT ON wired.health_events TO 'grafana'@'%';
 
 FLUSH PRIVILEGES;

@@ -1,0 +1,18 @@
+---
+description: Purpose, stack, LXC runtime, naming, and public-repo hygiene for fleet-health-ingest
+alwaysApply: true
+---
+
+# fleet-health-ingest
+
+Generic host-health ingest lab: FastAPI POST, MariaDB, Grafana. Compose locally. Actions to GHCR. Terraform on AWS next.
+
+At session start, read `AGENTS.md`, `STATUS.md`, `NAMING.md`, and `GLOSSARY.md`. Do the next STATUS item. Do not invent scope. Do not invent name tokens.
+
+This lab is for learning. Teach AWS from Linux/ops analogues (see the continue-session skill). Do not assume prior AWS.
+
+- Public repo: no personal details, employer names, internal product names, customer data, or cloud keys.
+- Runtime is LXC. Do not install Docker, Terraform, or AWS CLIs on the host.
+- Lab Compose passwords stay in Compose. Do not reuse them on AWS.
+- Use a regular hyphen `-`. Do not use em dashes.
+- End of session: update `STATUS.md`.

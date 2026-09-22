@@ -12,14 +12,14 @@ def test_health() -> None:
 
 
 def test_ingest_rejects_incomplete_payload() -> None:
-    response = client.post("/ingest", json={"host": "lab-01"})
+    response = client.post("/ingest", json={"host": "navi-01"})
     assert response.status_code == 422
 
 
 def test_ingest_rejects_cpu_out_of_range() -> None:
     response = client.post(
         "/ingest",
-        json={"host": "lab-01", "cpu_pct": 140, "mem_pct": 10, "ok": True},
+        json={"host": "navi-01", "cpu_pct": 140, "mem_pct": 10, "ok": True},
     )
     assert response.status_code == 422
 

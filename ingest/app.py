@@ -11,7 +11,7 @@ DATABASE_HOST = os.getenv("DATABASE_HOST", "127.0.0.1")
 DATABASE_PORT = int(os.getenv("DATABASE_PORT", "3306"))
 DATABASE_USER = os.getenv("DATABASE_USER", "ingest")
 DATABASE_PASSWORD = os.getenv("DATABASE_PASSWORD", "ingest")
-DATABASE_NAME = os.getenv("DATABASE_NAME", "fleet")
+DATABASE_NAME = os.getenv("DATABASE_NAME", "wired")
 
 
 class HealthIn(BaseModel):

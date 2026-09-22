@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 280" width="640" height="280" role="img" aria-labelledby="t d">
+  <title id="t">navis post into wired</title>
+  <desc id="d">Three navis POST to ingest on wired. Ingest writes MariaDB. Layer reads MariaDB.</desc>
+  <rect width="640" height="280" fill="#f5f0e8"/>
+  <text x="24" y="28" font-family="Georgia, serif" font-size="13" fill="#57534e">scratch - navis post in - this is wired</text>
+
+  <g font-family="Georgia, serif" font-size="13" fill="#1c1917">
+    <rect x="24" y="52" width="120" height="44" fill="#fffcf7" stroke="#1c1917" stroke-width="1.5"/>
+    <text x="84" y="78" text-anchor="middle">navi-01</text>
+    <rect x="24" y="112" width="120" height="44" fill="#fffcf7" stroke="#1c1917" stroke-width="1.5"/>
+    <text x="84" y="138" text-anchor="middle">navi-02</text>
+    <rect x="24" y="172" width="120" height="44" fill="#fffcf7" stroke="#1c1917" stroke-width="1.5"/>
+    <text x="84" y="198" text-anchor="middle">navi-03</text>
+    <text x="84" y="242" text-anchor="middle" font-size="11" fill="#57534e">sender - ~5 min</text>
+  </g>
+
+  <g stroke="#1c1917" stroke-width="1.5" fill="none">
+    <path d="M154 74 H230"/>
+    <path d="M154 134 H230"/>
+    <path d="M154 194 H210 V134 H230"/>
+    <polygon points="222,130 230,134 222,138" fill="#1c1917" stroke="none"/>
+  </g>
+  <text x="192" y="122" font-family="Georgia, serif" font-size="11" fill="#57534e">POST</text>
+
+  <g font-family="Georgia, serif" font-size="13" fill="#1c1917">
+    <rect x="250" y="48" width="360" height="196" fill="#fffcf7" stroke="#1c1917" stroke-width="2"/>
+    <text x="270" y="72" font-size="15">wired</text>
+    <text x="270" y="90" font-size="11" fill="#57534e">one lxc - compose</text>
+
+    <rect x="270" y="108" width="320" height="36" fill="#f5f0e8" stroke="#1c1917" stroke-dasharray="4 3"/>
+    <text x="430" y="131" text-anchor="middle">ingest - receiver</text>
+
+    <rect x="270" y="156" width="320" height="36" fill="#f5f0e8" stroke="#1c1917" stroke-dasharray="4 3"/>
+    <text x="430" y="179" text-anchor="middle">mariadb - bucket</text>
+
+    <rect x="270" y="192" width="320" height="36" fill="#ecfccb" stroke="#3f6212"/>
+    <text x="430" y="215" text-anchor="middle">Layer - eyes</text>
+  </g>
+</svg>
